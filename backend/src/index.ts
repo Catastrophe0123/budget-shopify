@@ -7,6 +7,9 @@ import { loginuser, registerUser } from './controllers/authentication';
 import { errorHandler } from './middlewares/error-handler';
 import { RequestError } from './utils/errors/request-error';
 import cookieSession from 'cookie-session';
+import { getUser } from './controllers/user';
+import { currentUser } from './middlewares/get-user';
+import { createStore, updateStore } from './controllers/store';
 
 config();
 
@@ -19,7 +22,7 @@ app.use(
 		secret: process.env.SESSION_SECRET,
 		signed: false,
 		// secure: true,
-		// maxAge: TODO:
+		maxAge: 24 * 60 * 60 * 1000,
 	})
 );
 
@@ -31,6 +34,11 @@ app.get('/', (req, res) => {
 
 app.post('/register', registerUser);
 app.post('/login', loginuser);
+
+app.get('/user', currentUser, getUser);
+
+app.post('/store', currentUser, createStore);
+app.put('/store', currentUser, updateStore);
 
 app.use(errorHandler);
 

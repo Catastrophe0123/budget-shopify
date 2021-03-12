@@ -26,7 +26,7 @@ import { Password } from '../utils/Password';
 	}
 	next();
 })
-class UserClass {
+export class UserClass {
 	@prop({ required: true, unique: true })
 	public email!: string;
 

@@ -20,11 +20,12 @@ export const registerUser = async (req: Request, res: Response) => {
 	}
 
 	let user = await User.create({ email, password, role });
-	user.save();
+	await user.save();
 
 	const payload = {
 		id: user.id,
 		email: user.email,
+		role: user.role,
 		// TODO: Should have shop id too
 	};
 
@@ -55,6 +56,7 @@ export const loginuser = async (req: Request, res: Response) => {
 		const payload = {
 			id: dbuser.id,
 			email: dbuser.email,
+			role: dbuser.role,
 			// TODO: Should have shop id too
 		};
 
