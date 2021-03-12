@@ -10,6 +10,14 @@ import cookieSession from 'cookie-session';
 import { getUser } from './controllers/user';
 import { currentUser } from './middlewares/get-user';
 import { createStore, updateStore } from './controllers/store';
+import {
+	addItem,
+	deleteItem,
+	getItem,
+	getItems,
+	updateItem,
+} from './controllers/inventory';
+import { isAdmin } from './middlewares/isAdmin';
 
 config();
 
@@ -32,13 +40,19 @@ app.get('/', (req, res) => {
 	res.send('hello world');
 });
 
-app.post('/register', registerUser);
-app.post('/login', loginuser);
+app.post('/register', registerUser); // REGULAR ROUTE
+app.post('/login', loginuser); // REGULAR ROUTE
 
-app.get('/user', currentUser, getUser);
+app.get('/user', currentUser, getUser); // USER ROUTE
 
-app.post('/store', currentUser, createStore);
-app.put('/store', currentUser, updateStore);
+app.post('/store', [currentUser, isAdmin], createStore); // ADMIN ROUTE
+app.put('/store', [currentUser, isAdmin], updateStore); // ADMIN ROUTE
+
+app.get('/:store/items', getItems); // REGULAR ROUTE
+app.get('/:store/items/:id', getItem); // REGULAR ROUTE
+app.post('/item', [currentUser, isAdmin], addItem); // ADMIN ROUTE
+app.put('/item/:id', [currentUser, isAdmin], updateItem); // ADMIN ROUTE
+app.delete('/item/:id', [currentUser, isAdmin], deleteItem); // ADMIN ROUTE
 
 app.use(errorHandler);
 
