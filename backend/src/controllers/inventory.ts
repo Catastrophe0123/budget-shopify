@@ -10,9 +10,14 @@ export const getItems = async (req: Request, res: Response) => {
 	// get items
 
 	let store = await Store.findById(req.params.store);
+
 	if (!store) {
 		throw new RequestError('Store does not exist', 400);
 	}
+	store = await store
+		?.populate({ path: 'inventory', model: Item })
+		.execPopulate();
+
 	return res.status(200).send(store.inventory);
 };
 
@@ -39,12 +44,23 @@ export const addItem = async (req: Request, res: Response) => {
 	let itemData = req.body;
 	let curruserid = req.currentUser?.id;
 	let store = await Store.findOne({ owner: curruserid });
+	console.log('store : ', store);
 	if (!store) {
 		throw new RequestError('Cannot modify this data', 400);
 	}
 	// store found
+
+	console.log('store : ', store);
+
 	let item = await Item.create(itemData);
 	store.inventory?.push(item);
+	await store.save();
+	// let ret = await store.populate('inventory').execPopulate();
+	// console.log(ret);
+	console.log(store);
+	store = await store
+		.populate({ path: 'inventory', model: Item })
+		.execPopulate();
 
 	return res
 		.status(201)

@@ -32,7 +32,6 @@ export class App extends Component {
 		return (
 			<div>
 				<Router>
-					<h1>hello world</h1>
 					<Switch>
 						<Route
 							path='/login'

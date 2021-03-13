@@ -19,7 +19,6 @@ export const currentUser = (
 	// get the current user
 	// authenticated route
 	// console.log(req.session);
-	console.log(req.session);
 	if (req.session?.jwt) {
 		const token = req.session.jwt;
 		let decodedToken = jwt.verify(

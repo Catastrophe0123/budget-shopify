@@ -20,7 +20,8 @@ export class Login extends Component {
 			});
 			let mail = resp.data.user.email;
 			let role = resp.data.user.role;
-			let store = resp.data.user.store;
+			let store = resp.data.store;
+			console.log(resp);
 			this.setState({ errors: null }, () => {
 				console.log('running?');
 				this.props.loginSuccessHandler(mail, role, store, () => {

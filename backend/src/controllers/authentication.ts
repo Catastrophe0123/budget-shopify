@@ -71,14 +71,12 @@ export const registerUser = async (req: Request, res: Response) => {
 
 	req.session = { jwt: token };
 
-	return res
-		.status(201)
-		.json({
-			message: 'New User Created successfully',
-			user,
-			store: newStore.id,
-			token: token,
-		});
+	return res.status(201).json({
+		message: 'New User Created successfully',
+		user,
+		store: newStore.id,
+		token: token,
+	});
 };
 
 export const loginuser = async (req: Request, res: Response) => {
@@ -110,9 +108,14 @@ export const loginuser = async (req: Request, res: Response) => {
 		});
 		req.session = { jwt: token };
 
-		return res
-			.status(200)
-			.json({ message: 'login successful', user: dbuser, token });
+		const store = await Store.findOne({ owner: dbuser.id });
+
+		return res.status(200).json({
+			message: 'login successful',
+			user: dbuser,
+			store: store?.id,
+			token,
+		});
 	} else {
 		throw new RequestError('Invalid Credentials', 400);
 	}

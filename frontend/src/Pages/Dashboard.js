@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 export class Dashboard extends Component {
 	render() {
@@ -8,6 +9,9 @@ export class Dashboard extends Component {
 				<h1>list of customers</h1>
 				<h1> show visit count </h1>
 				<h1> view items/inventory </h1>
+				<Link to='/inventory'>
+					<button>VIEW INVENTORY</button>
+				</Link>
 			</div>
 		);
 	}
