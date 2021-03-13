@@ -21,8 +21,8 @@ export class ItemClass {
 	@prop({ required: true })
 	public category!: string;
 
-	@prop()
-	public quantityAvailable?: number;
+	@prop({ required: true })
+	public quantityAvailable!: number;
 
 	@prop({ default: 'https://semantic-ui.com/images/wireframe/image.png' })
 	public image?: string;

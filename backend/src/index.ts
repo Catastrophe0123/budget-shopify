@@ -18,6 +18,8 @@ import {
 	updateItem,
 } from './controllers/inventory';
 import { isAdmin } from './middlewares/isAdmin';
+import { addToCart, removeFromCart } from './controllers/cart';
+import { isCustomer } from './middlewares/isCustomer';
 
 config();
 
@@ -48,11 +50,14 @@ app.get('/user', currentUser, getUser); // USER ROUTE
 app.post('/store', [currentUser, isAdmin], createStore); // ADMIN ROUTE
 app.put('/store', [currentUser, isAdmin], updateStore); // ADMIN ROUTE
 
-app.get('/:store/items', getItems); // REGULAR ROUTE
+app.get('/:store/items', getItems); // REGULAR ROUTE -> TODO: HANDLE CATEGORY AND SEARCH ROUTES
 app.get('/:store/items/:id', getItem); // REGULAR ROUTE
 app.post('/item', [currentUser, isAdmin], addItem); // ADMIN ROUTE
 app.put('/item/:id', [currentUser, isAdmin], updateItem); // ADMIN ROUTE
 app.delete('/item/:id', [currentUser, isAdmin], deleteItem); // ADMIN ROUTE
+
+app.post('/:store/cart/:item', [currentUser, isCustomer], addToCart);
+app.post('/:store/cart/:item', [currentUser, isCustomer], removeFromCart); // TODO: have to check array.pull
 
 app.use(errorHandler);
 
