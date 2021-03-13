@@ -24,14 +24,26 @@ import { isCustomer } from './middlewares/isCustomer';
 config();
 
 const app = express();
-app.use(cors());
+app.use(
+	cors({
+		origin: ['http://localhost:3000'],
+		exposedHeaders: ['set-cookie'],
+		credentials: true,
+	})
+);
 app.use(express.json());
+
+app.set('trust proxy', 1);
 
 app.use(
 	cookieSession({
 		secret: process.env.SESSION_SECRET,
-		signed: false,
-		// secure: true,
+		// signed: false,
+		httpOnly: true,
+		sameSite: 'lax',
+		secure: false,
+		// secureProxy: false,
+		// // secure: true,
 		maxAge: 24 * 60 * 60 * 1000,
 	})
 );

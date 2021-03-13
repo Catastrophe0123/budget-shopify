@@ -13,11 +13,14 @@ import { UserClass } from './User';
 	options: { customName: 'Stores' },
 })
 export class StoreClass {
-	@prop({ unique: true })
+	@prop()
 	public name?: string;
 
 	// @prop()
 	// public ownerName?: string;
+
+	@prop()
+	public address?: string;
 
 	@prop({ ref: () => UserClass })
 	public owner!: Ref<UserClass>;

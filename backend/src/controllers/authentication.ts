@@ -63,6 +63,7 @@ export const registerUser = async (req: Request, res: Response) => {
 		id: user.id,
 		email: user.email,
 		role: user.role,
+		store: newStore.id,
 		// TODO: Should have shop id too
 	};
 
@@ -72,7 +73,12 @@ export const registerUser = async (req: Request, res: Response) => {
 
 	return res
 		.status(201)
-		.json({ message: 'New User Created successfully', user, token: token });
+		.json({
+			message: 'New User Created successfully',
+			user,
+			store: newStore.id,
+			token: token,
+		});
 };
 
 export const loginuser = async (req: Request, res: Response) => {
@@ -90,10 +96,12 @@ export const loginuser = async (req: Request, res: Response) => {
 	const bool = await Password.compare(dbuser.password, password);
 	if (bool) {
 		// matching
+		// let store = await Store.
 		const payload = {
 			id: dbuser.id,
 			email: dbuser.email,
 			role: dbuser.role,
+			// store:
 			// TODO: Should have shop id too
 		};
 

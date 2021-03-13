@@ -9,20 +9,20 @@ import {
 import { UserClass } from './User';
 
 @modelOptions({
-	options: { customName: 'Stores' },
+	options: { customName: 'Items' },
 })
 export class ItemClass {
-	@prop({ required: true })
-	public name!: string;
+	@prop()
+	public name?: string;
 
-	@prop({ required: true })
-	public price!: string;
+	@prop()
+	public price?: string;
 
-	@prop({ required: true })
-	public category!: string;
+	@prop()
+	public category?: string;
 
-	@prop({ required: true })
-	public quantityAvailable!: number;
+	@prop()
+	public quantityAvailable?: number;
 
 	@prop({ default: 'https://semantic-ui.com/images/wireframe/image.png' })
 	public image?: string;
