@@ -41,8 +41,10 @@ export const createStore = async (req: Request, res: Response) => {
 export const updateStore = async (req: Request, res: Response) => {
 	// update store
 
-	const { name, ...storeData } = req.body;
-	const dbstore = await Store.findOne({ name: name });
+	// const { name, ...storeData } = req.body;
+	// const dbstore = await Store.findOne({ name: name });
+	const { id, ...storeData } = req.body;
+	const dbstore = await Store.findById(id);
 	if (!dbstore) {
 		// TODO: have to check for shop id too later.
 		throw new RequestError('Store doesnt exists', 400);
@@ -56,7 +58,7 @@ export const updateStore = async (req: Request, res: Response) => {
 		);
 	}
 
-	let data = { ...storeData, name: dbstore.name, owner: dbstore.owner };
+	let data = { ...storeData, owner: dbstore.owner };
 	await dbstore.update(data);
 	return res
 		.status(200)

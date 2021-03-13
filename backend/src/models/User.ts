@@ -4,8 +4,11 @@ import {
 	pre,
 	modelOptions,
 	DocumentType,
+	Ref,
 } from '@typegoose/typegoose';
 import { Password } from '../utils/Password';
+import { ItemClass } from './Item';
+import { StoreClass } from './Store';
 
 // roles are : CUSTOMER, ADMIN, SUPER-ADMIN?
 @modelOptions({
@@ -35,6 +38,12 @@ export class UserClass {
 
 	@prop({ default: 'CUSTOMER' })
 	public role?: string;
+
+	// @prop({ ref: () => StoreClass })
+	// public store?: Ref<StoreClass>;
+
+	@prop({ ref: () => ItemClass })
+	public cart?: Ref<ItemClass>[];
 }
 
 const User = getModelForClass(UserClass);
