@@ -8,7 +8,7 @@ const Login = () => {
   const router = useRouter();
   const userLogin = async (e) => {
     e.preventDefault();
-    const res = await fetch(`https://localhost:3000/login`, {
+    const res = await fetch(`http://localhost:5000/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -16,17 +16,16 @@ const Login = () => {
       body: JSON.stringify({
         email,
         password,
+        role: "ADMIN",
       }),
     });
 
     const res2 = await res.json();
-    if (res2.error) {
-      M.toast({ html: res2.error, classes: "red" });
+    if (res2.message == "login successful") {
+      M.toast({ html: res2.message, classes: "green" });
+      router.push({ pathname: "/", query: { LoggedIn: "True" } });
     } else {
-      console.log(res2);
-      cookie.set("token", res2.token);
-      cookie.set("user", res2.user);
-      router.push("/account");
+      M.toast({ html: res2.errors[0].message, classes: "red" });
     }
   };
   return (
