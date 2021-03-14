@@ -6,6 +6,11 @@ import { Password } from '../utils/Password';
 import { Store } from '../models/Store';
 import { mongoose } from '@typegoose/typegoose';
 
+export const logoutUser = (req: Request, res: Response) => {
+	req.session = null;
+	return res.status(200).json({ message: 'logout success' });
+};
+
 // create
 export const registerUser = async (req: Request, res: Response) => {
 	// res.send('hello wrodlsd');
@@ -63,6 +68,7 @@ export const registerUser = async (req: Request, res: Response) => {
 		id: user.id,
 		email: user.email,
 		role: user.role,
+		store: newStore.id,
 		// TODO: Should have shop id too
 	};
 
@@ -70,9 +76,12 @@ export const registerUser = async (req: Request, res: Response) => {
 
 	req.session = { jwt: token };
 
-	return res
-		.status(201)
-		.json({ message: 'New User Created successfully', user, token: token });
+	return res.status(201).json({
+		message: 'New User Created successfully',
+		user,
+		store: newStore.id,
+		token: token,
+	});
 };
 
 export const loginuser = async (req: Request, res: Response) => {
@@ -90,10 +99,12 @@ export const loginuser = async (req: Request, res: Response) => {
 	const bool = await Password.compare(dbuser.password, password);
 	if (bool) {
 		// matching
+		// let store = await Store.
 		const payload = {
 			id: dbuser.id,
 			email: dbuser.email,
 			role: dbuser.role,
+			// store:
 			// TODO: Should have shop id too
 		};
 
@@ -102,9 +113,14 @@ export const loginuser = async (req: Request, res: Response) => {
 		});
 		req.session = { jwt: token };
 
-		return res
-			.status(200)
-			.json({ message: 'login successful', user: dbuser, token });
+		const store = await Store.findOne({ owner: dbuser.id });
+
+		return res.status(200).json({
+			message: 'login successful',
+			user: dbuser,
+			store: store?.id,
+			token,
+		});
 	} else {
 		throw new RequestError('Invalid Credentials', 400);
 	}

@@ -1,0 +1,357 @@
+#headrr
+{
+  background-color: #FF8D27;
+  font-size: 40px;
+  height: 730px; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  float: left;
+  position: relative; 
+  width: 50%;
+  vertical-align: baseline;
+}
+
+#loginbox
+{
+  float: right;
+  width: 50%;
+  height: 730px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(55, 54, 54); 
+  color: white;
+  font-family: Jost,sans-serif;;
+  vertical-align: baseline;
+}
+
+#bud
+{
+  color:white;
+  font-size: 40px;
+}
+
+#last
+{
+  font-size: 15px;
+}
+
+#c
+{
+  color: white;
+}
+
+#i1,#i2
+{
+  display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 200px;
+    height: 30px;
+    border: 1px solid;
+    font-family: ProximaNova;
+    font-size: 12px;
+    padding-left: 8px;
+    border-width: 2px;
+    box-sizing: content-box;
+    border-color: white;
+    color: white;
+    background-color: rgb(55, 54, 54) ;
+}
+
+#b1
+{
+  text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 75px;
+    width: 70px;
+    height: 30px;
+    font-family: Avenir;
+    font-size: 12px;
+    font-weight: 900; 
+}
+
+#cb1
+{
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 175px;
+  width: 140px;
+  height: 30px;
+  font-family: Avenir;
+  font-size: 12px;
+  font-weight: 900;
+}
+ 
+#er
+{
+  text-align: center;
+}
+
+.callout {
+  position: fixed;
+  bottom: 35px;
+  right: 20px;
+  margin-left: 20px;
+  max-width: 300px;
+}
+
+.callout-header {
+  padding: 25px 15px;
+  background: #FF8D27;
+  font-size: 20px;
+  color: rgb(55, 54, 54);
+}
+
+.closebtn {
+  position: absolute;
+  top: 5px;
+  right: 15px;
+  color: rgb(55, 54, 54);
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.closebtn:hover {
+  color: lightgrey;
+}
+
+#mainc
+{
+  background-color: rgb(55, 54, 54);
+  width: max-content;
+  height: 640px;
+  width: 1536px;
+  font-family: Jost,sans-serif;;
+  vertical-align: baseline;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+#cbox
+{
+  border: 3px solid;
+  box-sizing: border-box;
+  border-color: white;
+  padding: 50px;
+}
+
+#ct
+{
+  color: #FF8D27;
+  font-size: 40px;
+}
+
+#ci1,#ci2,#ci3
+{
+  display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 250px;
+    height: 30px;
+    border: 1px solid;
+    font-family: ProximaNova;
+    font-size: 12px;
+    padding-left: 8px;
+    border-width: 2px;
+    margin-left: 115px;
+    box-sizing: content-box;
+    border-color: white;
+    color: white;
+    background-color: rgb(55, 54, 54) ;
+}
+
+/*Start of header css*/
+
+#pic
+{
+  width: 45px;
+  padding: 0px 0px;
+}
+
+body { 
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.header {
+  overflow: hidden;
+  background-color: #FF8D27;
+  padding: 20px 10px;
+}
+
+.header a {
+  float: left;
+  color: white;
+  text-align: center;
+  padding: 12px;
+  text-decoration: none;
+  font-size: 18px; 
+  line-height: 25px;
+  border-radius: 4px;
+}
+
+.header a.logoi
+{
+  padding: 0px;
+}
+
+.header a.logo {
+  font-size: 40px;
+  font-weight: bold;
+  padding-left: 0px;
+}
+
+
+.header a.active {
+  background-color: dodgerblue;
+  color: white;
+}
+
+.header-right {
+  float: right;
+}
+
+@media screen and (max-width: 500px) {
+  .header a {
+    float: none;
+    display: block;
+    text-align: left;
+  }
+  
+  .header-right {
+    float: none;
+  }
+}
+
+/*End for header css*/
+
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  max-width: 300px;
+  margin: auto;
+  text-align: center;
+  font-family: arial;
+}
+
+.price {
+  color: grey;
+  font-size: 22px;
+}
+
+.card button {
+  border: none;
+  outline: 0;
+  padding: 12px;
+  color: white;
+  background-color: #000;
+  text-align: center;
+  cursor: pointer;
+  width: 100%;
+  font-size: 18px;
+}
+
+.card button:hover {
+  opacity: 0.7;
+}
+
+.tab1cards {
+  display: flex;
+  flex-direction: row;
+}
+
+
+#fh
+{
+  text-align: center;
+  align-items: center;
+  display: grid;
+  background-color: rgb(55, 54, 54);
+  font-family: Avenir;
+  color: white;
+
+}
+
+#sb1
+{
+  margin: auto;
+  margin-bottom: 30px;
+}
+
+.si
+{
+  display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 250px;
+    height: 30px;
+    border: 1px solid;
+    font-family: ProximaNova;
+    font-size: 12px;
+    padding-left: 8px;
+    border-width: 2px;
+    margin: auto;
+    box-sizing: content-box;
+    border-color: White;
+    color: white;
+    background-color:rgb(55, 54, 54) ;
+
+}
+
+#lie
+{
+  border-bottom: 2px solid;
+}
+
+#sum
+{
+  text-align: center;
+  font-size: 40px;
+}
+
+#icpic
+{
+  width: 1519px;
+}
+#icenter
+{
+  position: relative;
+}
+.top-left {
+  position: absolute;
+  top: 80px;
+  left: 180px;
+}
+.bottom-right {
+  position: absolute;
+  top: 200px;
+  left: 35px;
+}
+#ich1
+{
+  font-size: 50px;
+  color: white;
+}
+#ich2
+{
+  font-size: 25px;
+  color: white;
+}
+#imain
+{
+
+}
+#adv
+{
+  text-align: center;
+  color: black;
+
+}

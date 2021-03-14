@@ -1,4 +1,5 @@
 // STORE CRUD -> ADMINS ONLY read/write
+import { mongoose } from '@typegoose/typegoose';
 import { Request, Response } from 'express';
 import { Store } from '../models/Store';
 import { User } from '../models/User';
@@ -44,14 +45,14 @@ export const updateStore = async (req: Request, res: Response) => {
 	// const { name, ...storeData } = req.body;
 	// const dbstore = await Store.findOne({ name: name });
 	const { id, ...storeData } = req.body;
-	const dbstore = await Store.findById(id);
+	const dbstore = await Store.findById(mongoose.Types.ObjectId(id));
 	if (!dbstore) {
 		// TODO: have to check for shop id too later.
 		throw new RequestError('Store doesnt exists', 400);
 	}
 
 	// check if the owner is updating
-	if (dbstore.owner !== req.currentUser?.id) {
+	if (dbstore.owner != req.currentUser?.id) {
 		throw new RequestError(
 			'You do not have permission to modify this data',
 			401
