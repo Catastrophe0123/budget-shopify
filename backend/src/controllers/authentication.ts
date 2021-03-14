@@ -6,6 +6,11 @@ import { Password } from '../utils/Password';
 import { Store } from '../models/Store';
 import { mongoose } from '@typegoose/typegoose';
 
+export const logoutUser = (req: Request, res: Response) => {
+	req.session = null;
+	return res.status(200).json({ message: 'logout success' });
+};
+
 // create
 export const registerUser = async (req: Request, res: Response) => {
 	// res.send('hello wrodlsd');

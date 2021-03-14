@@ -3,7 +3,11 @@ import 'express-async-errors';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import { config } from 'dotenv';
-import { loginuser, registerUser } from './controllers/authentication';
+import {
+	loginuser,
+	logoutUser,
+	registerUser,
+} from './controllers/authentication';
 import { errorHandler } from './middlewares/error-handler';
 import { RequestError } from './utils/errors/request-error';
 import cookieSession from 'cookie-session';
@@ -26,7 +30,7 @@ config();
 const app = express();
 app.use(
 	cors({
-		origin: ['http://localhost:3000'],
+		origin: ['http://localhost:3000', 'http://172.26.126.250:3000'],
 		exposedHeaders: ['set-cookie'],
 		credentials: true,
 	})
@@ -53,6 +57,8 @@ const PORT = process.env.PORT || 5000;
 app.get('/', (req, res) => {
 	res.send('hello world');
 });
+
+app.post('/logout', logoutUser);
 
 app.post('/register', registerUser); // REGULAR ROUTE
 app.post('/login', loginuser); // REGULAR ROUTE
