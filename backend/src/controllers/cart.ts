@@ -48,7 +48,16 @@ export const addToCart = async (req: Request, res: Response) => {
 		});
 		// await item.save();
 
-		return res.status(200).json({ message: 'added to cart', data: item });
+		// return res.status(200).json({ message: 'added to cart', data: item });
+		const popUser = await user
+			?.populate({ path: 'cart', model: Item })
+			.execPopulate();
+		console.log(popUser);
+		return res.status(200).json({
+			message: 'added to cart',
+			data: item,
+			cart: popUser?.cart,
+		});
 	}
 };
 
