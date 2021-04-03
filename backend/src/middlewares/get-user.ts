@@ -5,11 +5,12 @@ import jwt from 'jsonwebtoken';
 import { Store } from '../models/Store';
 import { DocumentType } from '@typegoose/typegoose';
 import { User, UserClass } from '../models/User';
+import { Item } from '../models/Item';
 
 declare global {
 	namespace Express {
 		interface Request {
-			currentUser?: DocumentType<UserClass> | undefined;
+			currentUser?: DocumentType<UserClass> | undefined | null;
 		}
 	}
 }
@@ -32,7 +33,10 @@ export const currentUser = async (
 		// find the store associated with the user
 		// const store = await Store.findOne({})
 
-		const currUser = await User.findById(decodedToken.id);
+		let currUser = await User.findById(decodedToken.id);
+		currUser = await currUser
+			?.populate({ path: 'cart', model: Item })
+			.execPopulate();
 
 		// req.currentUser = decodedToken;
 		req.currentUser = currUser;
