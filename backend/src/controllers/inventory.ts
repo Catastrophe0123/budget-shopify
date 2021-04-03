@@ -94,13 +94,13 @@ export const deleteItem = async (req: Request, res: Response) => {
 	if (store.inventory?.includes(itemId)) {
 		let x = await Item.findByIdAndDelete(itemId);
 		console.log('store before pull : ', store);
-		// @ts-nocheck
+		// @ts-ignore
 		store.inventory.pull({ _id: x.id });
-		await (await store.save())
+		const newStore = await (await store.save())
 			.populate({ path: 'inventory', model: Item })
 			.execPopulate();
 		console.log('store after pull : ', store);
-		return res.status(200).send(store);
+		return res.status(200).send(newStore);
 	} else {
 		throw new RequestError('Item is not on your inventory', 400);
 	}

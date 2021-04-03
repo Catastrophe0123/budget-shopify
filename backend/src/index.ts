@@ -75,7 +75,7 @@ app.put('/item/:id', [currentUser, isAdmin], updateItem); // ADMIN ROUTE
 app.delete('/item/:id', [currentUser, isAdmin], deleteItem); // ADMIN ROUTE
 
 app.post('/:store/cart/:item', [currentUser, isCustomer], addToCart);
-app.post('/:store/cart/:item', [currentUser, isCustomer], removeFromCart); // TODO: have to check array.pull
+app.delete('/:store/cart/:item', [currentUser, isCustomer], removeFromCart); // TODO: have to check array.pull
 
 app.use(errorHandler);
 

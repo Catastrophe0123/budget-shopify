@@ -21,7 +21,7 @@ export class ItemClass {
 	@prop()
 	public category?: string;
 
-	@prop()
+	@prop({ default: 0 })
 	public quantityAvailable?: number;
 
 	@prop({ default: 'https://semantic-ui.com/images/wireframe/image.png' })
