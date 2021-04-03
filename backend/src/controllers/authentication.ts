@@ -5,6 +5,7 @@ import jwt from 'jsonwebtoken';
 import { Password } from '../utils/Password';
 import { Store } from '../models/Store';
 import { mongoose } from '@typegoose/typegoose';
+import { Item } from '../models/Item';
 
 export const logoutUser = (req: Request, res: Response) => {
 	req.session = null;
@@ -51,10 +52,13 @@ export const registerUser = async (req: Request, res: Response) => {
 			});
 
 			req.session = { jwt: token };
+			const popUser = await user
+				?.populate({ path: 'cart', model: Item })
+				.execPopulate();
 
 			return res.status(201).json({
 				message: 'New User Created successfully',
-				user,
+				user: popUser,
 				token: token,
 			});
 		}
@@ -137,10 +141,13 @@ export const loginuser = async (req: Request, res: Response) => {
 			expiresIn: '1h',
 		});
 		req.session = { jwt: token };
+		const popUser = await dbuser
+			?.populate({ path: 'cart', model: Item })
+			.execPopulate();
 
 		return res.status(200).json({
 			message: 'login successful',
-			user: dbuser,
+			user: popUser,
 			token,
 		});
 	} else {
