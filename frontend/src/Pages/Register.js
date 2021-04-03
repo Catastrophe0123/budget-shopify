@@ -69,108 +69,145 @@
 
 // ----------------------------------------
 
-import React, { Component } from 'react';
-import Axios from '../utils/axiosInstance';
-import { constants } from '../utils/constants';
-import '../styles/App.css';
-import { Link } from 'react-router-dom';
+import React, { Component } from "react";
+import Axios from "../utils/axiosInstance";
+import { constants } from "../utils/constants";
+import { Link } from "react-router-dom";
+import "../styles/Register.css";
 
 export class Register extends Component {
-	state = { email: '', password: '', errors: null };
+    state = { email: "", password: "", errors: null };
 
-	onChangeHandler = (event) => {
-		let value = event.target.value;
-		this.setState({ [event.target.name]: value });
-	};
+    onChangeHandler = (event) => {
+        let value = event.target.value;
+        this.setState({ [event.target.name]: value });
+    };
 
-	onCloseError = async () => {
-		this.setState({ errors: null });
-	};
+    onCloseError = async () => {
+        this.setState({ errors: null });
+    };
 
-	onSubmitHandler = async () => {
-		try {
-			const { email, password } = this.state;
-			let resp = await Axios.post('/register', {
-				email,
-				password,
-				role: constants.ADMIN, //TODO: have to refactor. get the role from the parent
-			});
-			let mail = resp.data.user.email;
-			let role = resp.data.user.role;
-			let store = resp.data.store;
+    onSubmitHandler = async () => {
+        if (this.props.isAdminRoute) {
+            try {
+                const { email, password } = this.state;
+                let resp = await Axios.post("/register", {
+                    email,
+                    password,
+                    role: constants.ADMIN, //TODO: have to refactor. get the role from the parent
+                });
+                let mail = resp.data.user.email;
+                let role = resp.data.user.role;
+                let store = resp.data.store;
+                let cart = resp.data.user.cart;
 
-			this.setState({ errors: null }, () => {
-				this.props.loginSuccessHandler(mail, role, store, () => {
-					// REDIRECT HERE
-					console.log('im here now');
-					this.props.history.push('/createstore');
-				});
-			});
-		} catch (err) {
-			console.log(err.response);
-			this.setState({ errors: err.response.data.errors[0].message });
-		}
-	};
+                this.setState({ errors: null }, () => {
+                    this.props.loginSuccessHandler(
+                        mail,
+                        role,
+                        store,
+                        cart,
+                        () => {
+                            // REDIRECT HERE
+                            console.log("im here now");
+                            this.props.history.push("/createstore");
+                        }
+                    );
+                });
+            } catch (err) {
+                console.log(err.response);
+                this.setState({ errors: err.response.data.errors[0].message });
+            }
+        } else {
+            //  customer registration
+            try {
+                const { email, password } = this.state;
+                const resp = await Axios.post(
+                    "/register",
+                    { email, password, role: constants.CUSTOMER },
+                    { params: { store: this.props.match.params.storeid } }
+                );
+                let mail = resp.data.user.email;
+                let role = resp.data.user.role;
+                let store = resp.data.user.store;
+                let cart = resp.data.user.cart;
 
-	render() {
-		return (
-			<div id='main'>
-				<div id='headrr'>
-					<img
-						src='https://www.jtvdigital.com/wp-content/uploads/2013/05/iTunes_Pre-order1.png'
-						height='60px'
-					/>
-					<h2 id='bud'>Budget Shopify</h2>
-				</div>
-				<div id='loginbox'>
-					<h1 id='wel'>Register</h1>
-					<div>
-						<input
-							id='i1'
-							onChange={this.onChangeHandler}
-							value={this.state.email}
-							name='email'
-							type='email'
-							placeholder='Email'
-						/>
-						<br></br>
+                this.setState({ errors: null }, () => {
+                    this.props.loginSuccessHandler(
+                        mail,
+                        role,
+                        store,
+                        cart,
+                        (s) => {
+                            // REDIRECT HERE
+                            console.log("im here now");
+                            this.props.history.push(`/${s}`);
+                        }
+                    );
+                });
+            } catch (err) {
+                console.log(err.response);
+                this.setState({ errors: err.response.data.errors[0].message });
+            }
+        }
+    };
 
-						<input
-							id='i2'
-							onChange={this.onChangeHandler}
-							value={this.state.password}
-							name='password'
-							type='password'
-							placeholder='Password'
-						/>
-						<br></br>
-						<button id='b1' onClick={this.onSubmitHandler}>
-							SUBMIT
-						</button>
-						<h3 id='last'>
-							Already have an account?{' '}
-							<Link to='/login'>
-								<div id='c'>Login</div>
-							</Link>
-						</h3>
+    render() {
+        return (
+            <div id="register-main">
+                <div id="registerbox">
+                    <h1 id="wel">Register</h1>
+                    <div className="register-area">
+                        <input
+                            id="email"
+                            onChange={this.onChangeHandler}
+                            value={this.state.email}
+                            name="email"
+                            type="email"
+                            placeholder="Email"
+                        />
+                        <br></br>
 
-						{this.state.errors && (
-							<div class='callout'>
-								<div class='callout-header'>
-									{this.state.errors}
-								</div>
-								<span
-									class='closebtn'
-									onClick={this.onCloseError}>
-									×
-								</span>
-							</div>
-						)}
-					</div>
-				</div>
-			</div>
-		);
-	}
+                        <input
+                            id="password"
+                            onChange={this.onChangeHandler}
+                            value={this.state.password}
+                            name="password"
+                            type="password"
+                            placeholder="Password"
+                        />
+                        <br></br>
+                        <button id="submit" onClick={this.onSubmitHandler}>
+                            REGISTER
+                        </button>
+                        <h3 id="last">
+                            Already have an account?
+                            <Link
+                                to={`/${this.props.match.params.storeid}/login`}
+                                id="c"
+                            >
+                                <div>Login !</div>
+                            </Link>
+                        </h3>
+
+                        {this.state.errors && (
+                            <div class="callout">
+                                <div class="callout-header">
+                                    {this.state.errors}
+                                </div>
+                                <span
+                                    class="closebtn"
+                                    onClick={this.onCloseError}
+                                >
+                                    ×
+                                </span>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </div>
+        );
+    }
 }
 
 export default Register;
