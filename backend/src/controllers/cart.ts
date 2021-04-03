@@ -90,8 +90,14 @@ export const removeFromCart = async (req: Request, res: Response) => {
 		user?.cart?.pull(item.id);
 		await user?.save();
 		await item.save();
-		return res
-			.status(200)
-			.json({ message: 'removed from cart', data: item });
+		const popUser = await user
+			?.populate({ path: 'cart', model: Item })
+			.execPopulate();
+		console.log(popUser);
+		return res.status(200).json({
+			message: 'removed from cart',
+			data: item,
+			cart: popUser?.cart,
+		});
 	}
 };
