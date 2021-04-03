@@ -49,10 +49,10 @@ export const addItem = async (req: Request, res: Response) => {
 		throw new RequestError('Cannot modify this data', 400);
 	}
 	// store found
-
 	console.log('store : ', store);
 
 	let item = await Item.create(itemData);
+	await item.save();
 	store.inventory?.push(item);
 	await store.save();
 	// let ret = await store.populate('inventory').execPopulate();
@@ -93,7 +93,14 @@ export const deleteItem = async (req: Request, res: Response) => {
 	}
 	if (store.inventory?.includes(itemId)) {
 		let x = await Item.findByIdAndDelete(itemId);
-		return res.status(200).send(x);
+		console.log('store before pull : ', store);
+		// @ts-nocheck
+		store.inventory.pull({ _id: x.id });
+		await (await store.save())
+			.populate({ path: 'inventory', model: Item })
+			.execPopulate();
+		console.log('store after pull : ', store);
+		return res.status(200).send(store);
 	} else {
 		throw new RequestError('Item is not on your inventory', 400);
 	}

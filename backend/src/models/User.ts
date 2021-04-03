@@ -39,6 +39,8 @@ export class UserClass {
 	@prop({ default: 'CUSTOMER' })
 	public role?: string;
 
+	@prop({ ref: () => StoreClass })
+	public store?: Ref<StoreClass>;
 	// @prop({ ref: () => StoreClass })
 	// public store?: Ref<StoreClass>;
 

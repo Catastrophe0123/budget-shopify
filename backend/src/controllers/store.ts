@@ -44,8 +44,14 @@ export const updateStore = async (req: Request, res: Response) => {
 
 	// const { name, ...storeData } = req.body;
 	// const dbstore = await Store.findOne({ name: name });
-	const { id, ...storeData } = req.body;
-	const dbstore = await Store.findById(mongoose.Types.ObjectId(id));
+
+	const currUser = req.currentUser;
+
+	const { name, address } = req.body;
+	if (name == '' || address == '') {
+		throw new RequestError('Invalid form', 400);
+	}
+	const dbstore = await Store.findById(currUser?.store);
 	if (!dbstore) {
 		// TODO: have to check for shop id too later.
 		throw new RequestError('Store doesnt exists', 400);
@@ -59,7 +65,7 @@ export const updateStore = async (req: Request, res: Response) => {
 		);
 	}
 
-	let data = { ...storeData, owner: dbstore.owner };
+	let data = { name, address, owner: dbstore.owner };
 	await dbstore.update(data);
 	return res
 		.status(200)

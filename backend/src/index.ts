@@ -61,7 +61,7 @@ app.get('/', (req, res) => {
 app.post('/logout', logoutUser);
 
 app.post('/register', registerUser); // REGULAR ROUTE
-app.post('/login', loginuser); // REGULAR ROUTE
+app.post('/login', loginuser); // REGULAR ROUTE -> IMP: MUST SEND STORE ID AS QUERY PARAM "STORE"
 
 app.get('/user', currentUser, getUser); // USER ROUTE
 
