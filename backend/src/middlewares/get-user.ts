@@ -2,16 +2,19 @@ import { NextFunction, Request, Response } from 'express';
 import { RequestError } from '../utils/errors/request-error';
 import { jwtPayload } from '../utils/jwt-payload';
 import jwt from 'jsonwebtoken';
+import { Store } from '../models/Store';
+import { DocumentType } from '@typegoose/typegoose';
+import { User, UserClass } from '../models/User';
 
 declare global {
 	namespace Express {
 		interface Request {
-			currentUser?: jwtPayload;
+			currentUser?: DocumentType<UserClass> | undefined;
 		}
 	}
 }
 
-export const currentUser = (
+export const currentUser = async (
 	req: Request,
 	res: Response,
 	next: NextFunction
@@ -25,7 +28,14 @@ export const currentUser = (
 			token,
 			process.env.JWT_SECRET!
 		) as jwtPayload;
-		req.currentUser = decodedToken;
+
+		// find the store associated with the user
+		// const store = await Store.findOne({})
+
+		const currUser = await User.findById(decodedToken.id);
+
+		// req.currentUser = decodedToken;
+		req.currentUser = currUser;
 		// TODO: should get the user data from the backend
 		console.log('decoded token : ', decodedToken);
 		return next();

@@ -36,6 +36,7 @@ export const registerUser = async (req: Request, res: Response) => {
 				email,
 				password,
 				role,
+				store: store.id,
 			});
 			await user.save();
 			const payload = {
@@ -60,28 +61,38 @@ export const registerUser = async (req: Request, res: Response) => {
 	}
 
 	// CREATE ADMIN
-	let user = await User.create({ email, password, role });
-	await user.save();
-	let newStore = await Store.create({ owner: user.id });
-	await newStore.save();
-	const payload = {
-		id: user.id,
-		email: user.email,
-		role: user.role,
-		store: newStore.id,
-		// TODO: Should have shop id too
-	};
 
-	let token = jwt.sign(payload, process.env.JWT_SECRET!, { expiresIn: '1h' });
+	try {
+		let user = await User.create({ email, password, role });
+		await user.save();
+		let newStore = await Store.create({ owner: user.id });
+		await newStore.save();
+		user.store = newStore.id;
+		await user.save();
+		const payload = {
+			id: user.id,
+			email: user.email,
+			role: user.role,
+			store: newStore.id,
+			// TODO: Should have shop id too
+		};
 
-	req.session = { jwt: token };
+		let token = jwt.sign(payload, process.env.JWT_SECRET!, {
+			expiresIn: '1h',
+		});
 
-	return res.status(201).json({
-		message: 'New User Created successfully',
-		user,
-		store: newStore.id,
-		token: token,
-	});
+		req.session = { jwt: token };
+
+		return res.status(201).json({
+			message: 'New User Created successfully',
+			user,
+			store: newStore.id,
+			token: token,
+		});
+	} catch (err) {
+		console.log('erroring');
+		throw new RequestError('Invalid Form', 400);
+	}
 };
 
 export const loginuser = async (req: Request, res: Response) => {
@@ -89,23 +100,37 @@ export const loginuser = async (req: Request, res: Response) => {
 	if (!role) {
 		role = 'CUSTOMER';
 	}
-
 	const dbuser = await User.findOne({ email: email });
 	if (!dbuser) {
 		// TODO: have to check for shop id too later.
 		throw new RequestError('Invalid Credentials', 400);
 	}
-	// user exists
+	if (role !== dbuser.role) throw new RequestError('Invalid Request', 400);
 	const bool = await Password.compare(dbuser.password, password);
+
+	// user exists
 	if (bool) {
 		// matching
 		// let store = await Store.
+		if (role === 'CUSTOMER') {
+			// check if the customer is in the correct store
+			const storeid = req.query.store as string;
+			if (!storeid)
+				throw new RequestError(
+					'Must send store in params if logging in as customer',
+					400
+				);
+			console.log('db.store: ', dbuser.store);
+			// console.log('storeid: ', mongoose.Types.ObjectId(storeid));
+			if (dbuser.store?.toString() !== storeid)
+				throw new RequestError('Invalid store id', 400);
+		}
+
 		const payload = {
 			id: dbuser.id,
 			email: dbuser.email,
 			role: dbuser.role,
-			// store:
-			// TODO: Should have shop id too
+			store: dbuser.store,
 		};
 
 		let token = jwt.sign(payload, process.env.JWT_SECRET!, {
@@ -113,12 +138,9 @@ export const loginuser = async (req: Request, res: Response) => {
 		});
 		req.session = { jwt: token };
 
-		const store = await Store.findOne({ owner: dbuser.id });
-
 		return res.status(200).json({
 			message: 'login successful',
 			user: dbuser,
-			store: store?.id,
 			token,
 		});
 	} else {

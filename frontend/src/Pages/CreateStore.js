@@ -127,6 +127,8 @@ export class CreateStore extends Component {
 						/> */}
 						<br></br>
 
+						{this.state.errors && <p>{this.state.errors}</p>}
+
 						<button id='cb1' onClick={this.onCreateStoreHandler}>
 							CREATE STORE
 						</button>
